@@ -18,4 +18,4 @@ export const getWordOfDay = () => {
   return WORDS[index].toUpperCase();
 };
 
-export const solution = getWordOfDay();
+export const solution = "BURGER";
