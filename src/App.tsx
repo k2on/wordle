@@ -24,6 +24,28 @@ function App() {
     }
   }, [isGameWon]);
 
+  // Add keyboard event listener
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      
+      if (key === 'enter') {
+        onEnter();
+      } else if (key === 'backspace' || key === 'delete') {
+        onDelete();
+      } else if (key.length === 1 && key.match(/[a-z]/i)) {
+        onChar(key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener when component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentGuess, guesses, isGameWon]); // Add dependencies
+
   const onChar = (value: string) => {
     if (currentGuess.length < 6 && guesses.length < 7) {
       setCurrentGuess(`${currentGuess}${value}`);
@@ -95,7 +117,6 @@ function App() {
         isOpen={isAboutModalOpen}
         handleClose={() => setIsAboutModalOpen(false)}
       />
-
       <button
         type="button"
         className="mx-auto mt-8 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
