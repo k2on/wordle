@@ -27,13 +27,13 @@ function App() {
   // Add keyboard event listener
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase();
+      const key = event.key.toUpperCase();
       
-      if (key === 'enter') {
+      if (key === 'ENTER') {
         onEnter();
-      } else if (key === 'backspace' || key === 'delete') {
+      } else if (key === 'BACKSPACE' || key === 'DELETE') {
         onDelete();
-      } else if (key.length === 1 && key.match(/[a-z]/i)) {
+      } else if (key.length === 1 && key.match(/[A-Z]/i)) {
         onChar(key);
       }
     };
