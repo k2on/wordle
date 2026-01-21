@@ -44,7 +44,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentGuess, guesses, isGameWon]); // Add dependencies
+  }, [currentGuess, guesses, isGameWon, onEnter, onDelete, onChar]); // Add dependencies
 
   const onChar = (value: string) => {
     if (currentGuess.length < 6 && guesses.length < 7) {
