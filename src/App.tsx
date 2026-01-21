@@ -78,7 +78,6 @@ function App() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onEnter, onDelete, onChar]);
-});
   
   return (
     <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
