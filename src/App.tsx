@@ -24,28 +24,7 @@ function App() {
     }
   }, [isGameWon]);
 
-  // Add keyboard event listener
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toUpperCase();
-      
-      if (key === 'ENTER') {
-        onEnter();
-      } else if (key === 'BACKSPACE' || key === 'DELETE') {
-        onDelete();
-      } else if (key.length === 1 && key.match(/[A-Z]/i)) {
-        onChar(key);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Clean up the event listener when component unmounts
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [currentGuess, guesses, isGameWon, onEnter, onDelete, onChar]); // Add dependencies
-
+  
   const onChar = (value: string) => {
     if (currentGuess.length < 6 && guesses.length < 7) {
       setCurrentGuess(`${currentGuess}${value}`);
@@ -83,6 +62,29 @@ function App() {
     }
   };
 
+// Add keyboard event listener
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toUpperCase();
+      
+      if (key === 'ENTER') {
+        onEnter();
+      } else if (key === 'BACKSPACE' || key === 'DELETE') {
+        onDelete();
+      } else if (key.length === 1 && key.match(/[A-Z]/i)) {
+        onChar(key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener when component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentGuess, guesses, isGameWon, onEnter, onDelete, onChar]); // Add dependencies
+
+  
   return (
     <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
       <Alert message="Word not found" isOpen={isWordNotFoundAlertOpen} />
