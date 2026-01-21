@@ -24,66 +24,61 @@ function App() {
     }
   }, [isGameWon]);
 
-  
-  const onChar = (value: string) => {
-    if (currentGuess.length < 6 && guesses.length < 7) {
-      setCurrentGuess(`${currentGuess}${value}`);
-    }
-  };
+  const onChar = useCallback(
+    (value: string) => {
+      if (currentGuess.length < 6 && guesses.length < 7) {
+        setCurrentGuess((prev) => `${prev}${value}`);
+      }
+    },
+    [currentGuess.length, guesses.length]
+  );
 
-  const onDelete = () => {
-    setCurrentGuess(currentGuess.slice(0, -1));
-  };
+  const onDelete = useCallback(() => {
+    setCurrentGuess((prev) => prev.slice(0, -1));
+  }, []);
 
-  const onEnter = () => {
+  const onEnter = useCallback(() => {
     if (!isWordInWordList(currentGuess)) {
       setIsWordNotFoundAlertOpen(true);
-      return setTimeout(() => {
-        setIsWordNotFoundAlertOpen(false);
-      }, 2000);
+      setTimeout(() => setIsWordNotFoundAlertOpen(false), 2000);
+      return;
     }
 
     const winningWord = isWinningWord(currentGuess);
 
     if (currentGuess.length === 6 && guesses.length < 7 && !isGameWon) {
-      setGuesses([...guesses, currentGuess]);
+      setGuesses((prev) => [...prev, currentGuess]);
       setCurrentGuess("");
 
       if (winningWord) {
-        return setIsGameWon(true);
+        setIsGameWon(true);
+        return;
       }
 
       if (guesses.length === 5) {
         setIsGameLost(true);
-        return setTimeout(() => {
-          setIsGameLost(false);
-        }, 2000);
+        setTimeout(() => setIsGameLost(false), 2000);
       }
     }
-  };
+  }, [currentGuess, guesses.length, isGameWon]);
 
-// Add keyboard event listener
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toUpperCase();
-      
-      if (key === 'ENTER') {
+
+      if (key === "ENTER") {
         onEnter();
-      } else if (key === 'BACKSPACE' || key === 'DELETE') {
+      } else if (key === "BACKSPACE" || key === "DELETE") {
         onDelete();
-      } else if (key.length === 1 && key.match(/[A-Z]/i)) {
+      } else if (key.length === 1 && /[A-Z]/i.test(key)) {
         onChar(key);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Clean up the event listener when component unmounts
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [currentGuess, guesses, isGameWon, onEnter, onDelete, onChar]); // Add dependencies
-
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onEnter, onDelete, onChar]);
+}
   
   return (
     <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
